@@ -28,5 +28,16 @@ module.exports = {
         res.status(500).send(error);
         console.log(error);
       });
+  },
+  deleteProduct: (req, res) => {
+    const dbInstance = req.app.get("db");
+    const { params } = req;
+
+    dbInstance
+      .delete_products([params.product_id])
+      .then(() => res.sendStatus(200))
+      .catch(error => {
+        res.status(500).send({ errorMessage: "error at deleteProduct" });
+      });
   }
 };

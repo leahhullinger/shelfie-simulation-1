@@ -17,11 +17,22 @@ class Dashboard extends Component {
       this.setState({ inventory: response.data });
     });
   }
+  onDeleteClick = product_id => {
+    axios.delete(BASE_URL + `/api/inventory/${product_id}`).then(response => {
+      this.setState({ inventory: response.data });
+    });
+  };
   render() {
     return (
       <div className="inventory-container">
-        {this.state.inventory.map((product, id) => {
-          return <Product key={id} product={product} />;
+        {this.state.inventory.map((product, product_id) => {
+          return (
+            <Product
+              key={product_id}
+              product={product}
+              delete={this.onDeleteClick}
+            />
+          );
         })}
       </div>
     );

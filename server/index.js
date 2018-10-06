@@ -16,6 +16,7 @@ app.use(cors());
 
 app.get("/api/inventory", controller.getProducts);
 app.post("/api/product", controller.newProduct);
+app.delete("/api/inventory/:product_id", controller.deleteProduct);
 
 const port = 3005;
 app.listen(port, () => {
