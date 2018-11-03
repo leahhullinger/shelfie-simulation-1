@@ -14,9 +14,11 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-app.get("/api/inventory", controller.getProducts);
+app.get("/api/inventory", controller.getInventory);
+app.get("/api/product/:product_id", controller.getProduct);
 app.post("/api/product", controller.newProduct);
-app.delete("/api/inventory/:product_id", controller.deleteProduct);
+app.put("/api/product/:product_id", controller.editProduct);
+app.delete("/api/product/:product_id", controller.deleteProduct);
 
 const port = 3005;
 app.listen(port, () => {

@@ -3,13 +3,26 @@ module.exports = {
   //   res.status(200).send(inventory);
   // },
 
-  getProducts: (req, res, next) => {
+  getInventory: (req, res, next) => {
     const dbInstance = req.app.get("db");
 
     dbInstance
       .get_products()
       .then(products => {
         res.status(200).send(products);
+      })
+      .catch(error => {
+        res.status(500).send(error);
+      });
+  },
+  getProduct: (req, res) => {
+    const dbInstance = req.app.get("db");
+    const { product_id } = req.params;
+
+    dbInstance
+      .get_product(product_id)
+      .then(product => {
+        res.status(200).send(product);
       })
       .catch(error => {
         res.status(500).send(error);
@@ -29,15 +42,31 @@ module.exports = {
         console.log(error);
       });
   },
-  deleteProduct: (req, res) => {
+  editProduct: (req, res) => {
     const dbInstance = req.app.get("db");
-    const { params } = req;
+
+    const { product_id } = req.params;
+    const { product_name, product_price, image_url } = req.body;
 
     dbInstance
-      .delete_products([params.product_id])
+      .update_product(product_id, product_name, product_price, image_url)
+      .then(() => {
+        res.sendStatus(200);
+      })
+      .catch(error => {
+        console.log(error);
+        res.status(500).send(error);
+      });
+  },
+  deleteProduct: (req, res) => {
+    const dbInstance = req.app.get("db");
+    const { product_id } = req.params;
+
+    dbInstance
+      .delete_product([product_id])
       .then(() => res.sendStatus(200))
       .catch(error => {
-        res.status(500).send({ errorMessage: "error at deleteProduct" });
+        res.status(500).send(error, { errorMessage: "error at deleteProduct" });
       });
   }
 };
